@@ -1,0 +1,116 @@
+Dog
+Miamiou #Chatchat
+Elephant
+Giraffe
+Lion
+Tiger
+Bear
+Horse
+Dolphin
+Whale
+Monkey
+Chimpanzee
+Gorilla
+Koala
+Kangaroo
+Cheetah
+Zebra
+Rhino
+Bison
+Fox
+Wolf
+Polar Bear
+Red Panda
+Panda
+Camel
+Otter
+Beaver
+Squirrel
+Bat
+Platypus
+Eagle
+Penguin
+Owl
+Parrot
+Hummingbird
+Hawk
+Swan
+Falcon
+Toucan
+Peacock
+Sparrow
+Albatross
+Flamingo
+Pigeon
+Woodpecker
+Crow
+Vulture
+Kiwi
+Ostrich
+Turkey
+Snake
+Crocodile
+Turtle
+Lizard
+Komodo Dragon
+Chameleon
+Alligator
+Gecko
+Iguana
+Tortoise
+Boa Constrictor
+Gila Monster
+Rattlesnake
+Anaconda
+Monitor Lizard
+Frog
+Salamander
+Toad
+Newt
+Axolotl
+Tree Frog
+Goldfish
+Shark
+Clownfish
+Trout
+Salmon
+Swordfish
+Angelfish
+Catfish
+Piranha
+Seahorse
+Jellyfish
+Pufferfish
+Blowfish
+Electric Eel
+Ant
+Bee
+Butterfly
+Ladybug
+Dragonfly
+Grasshopper
+Beetle
+Mosquito
+Caterpillar
+Praying Mantis
+Firefly
+Cricket
+Cockroach
+Wasp
+Stick Insect
+Spider
+Scorpion
+Snail
+Octopus
+Squid
+Clam
+Mussel
+Cuttlefish
+Crab
+Lobster
+Shrimp
+Crawfish
+Krill
+Starfish
+Sea Urchin
+Sea Cucumber
