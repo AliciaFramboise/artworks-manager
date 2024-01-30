@@ -3,13 +3,14 @@ import os
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from api.routers import artwork, ideas
+from api.routers import artwork, ideas, auth
 from database.database import Base, engine
 
 app = FastAPI()
 
 app.include_router(artwork.router)
 app.include_router(ideas.router)
+app.include_router(auth.router)
 
 origins = {"http://localhost:3000", "localhost:3000"}
 
