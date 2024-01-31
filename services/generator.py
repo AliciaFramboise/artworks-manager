@@ -6,6 +6,7 @@ def random_fruits_veggies():
         fruits_veggies = lines.readlines()
         limit = len(fruits_veggies)
         ran_num = random.randint(0, limit)
+
         return fruits_veggies[ran_num].replace("\n", "")
 
 
@@ -14,6 +15,7 @@ def random_animals():
         animals = lines.readlines()
         limit = len(animals)
         ran_num = random.randint(0, limit)
+
         return animals[ran_num].replace("\n", "")
 
 

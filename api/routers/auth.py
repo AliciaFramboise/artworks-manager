@@ -21,8 +21,9 @@ router = APIRouter(
 
 @router.post("/", status_code=status.HTTP_201_CREATED)
 async def create_user(db: db_dependency,
-                      create_user_request: UserRequest):
-    user = await save_user(db, bcrypt, create_user_request)
+                      user_request: UserRequest):
+    user = await save_user(db, bcrypt, user_request)
+
     return user
 
 
@@ -31,5 +32,6 @@ async def login_with_token(form_data: Annotated[OAuth2PasswordRequestForm, Depen
                            db: db_dependency):
     if not await authenticate_user(db, bcrypt, form_data.username, form_data.password):
         return 'Failed Authentication'
+
     return 'Successfully Authenticate'
 

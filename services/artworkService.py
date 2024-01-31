@@ -12,11 +12,13 @@ async def get_all_artworks(db: Session):
 async def save_artwork(db: Session, title: str, description: str, filename: str):
     artwork_data = {"title": title, "description": description, "filename": filename}
     db_file = Artwork(**artwork_data)
+
     db.add(db_file)
     # commit any changes in the session to the real db
     db.commit()
     # get last state of db_file from the db
     db.refresh(db_file)
+
     return db_file
 
 
@@ -35,6 +37,7 @@ async def update_artwork_by_id(db: Session, artwork_id: int, title: str, descrip
     db.add(artwork_to_update)
     db.commit()
     db.refresh(artwork_to_update)
+
     return artwork_to_update
 
 

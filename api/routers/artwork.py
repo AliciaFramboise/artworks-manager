@@ -39,6 +39,7 @@ async def create_artwork(db: db_dependency,
 
         # Create file record in the database
         db_file = await save_artwork(db, title, description, file.filename)
+
         return {"file_id": db_file.id, "title": title, "description": description, "filename": file.filename}
     except Exception as e:
         # Handle exceptions (e.g., file upload failure)
@@ -54,6 +55,7 @@ async def update_artwork(db: db_dependency,
         result = await update_artwork_by_id(db, artwork_id, title, description)
         if not result:
             raise HTTPException(status_code=404, detail='Artwork not found.')
+
         return {"file_id": result.id, "title": title, "description": description}
     except Exception as e:
         # Handle exceptions (e.g., file upload failure)
