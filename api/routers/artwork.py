@@ -9,17 +9,20 @@ from database.database import get_db
 from services.artworkService import get_all_artworks, save_artwork, update_artwork_by_id, delete_artwork_id, \
     get_artwork_by_id
 
-router = APIRouter()
+router = APIRouter(
+    prefix='/artwork',
+    tags=['artwork']
+)
 
 db_dependency = Annotated[Session, Depends(get_db)]
 
 
-@router.get("/artwork", status_code=status.HTTP_200_OK)
+@router.get("/", status_code=status.HTTP_200_OK)
 async def get_all(db: db_dependency):
     return await get_all_artworks(db)
 
 
-@router.get("/artwork/{artwork_id}", status_code=status.HTTP_200_OK)
+@router.get("/{artwork_id}", status_code=status.HTTP_200_OK)
 async def get_artwork(db: db_dependency, artwork_id: int = Path(gt=0)):
     artwork = await get_artwork_by_id(db, artwork_id)
     if artwork is not None:
@@ -27,7 +30,7 @@ async def get_artwork(db: db_dependency, artwork_id: int = Path(gt=0)):
     raise HTTPException(status_code=404, detail='Artwork not found.')
 
 
-@router.post("/artwork", status_code=status.HTTP_201_CREATED)
+@router.post("/", status_code=status.HTTP_201_CREATED)
 async def create_artwork(db: db_dependency,
                          title: str = Form(...),
                          description: str = Form(...),
@@ -46,7 +49,7 @@ async def create_artwork(db: db_dependency,
         raise HTTPException(status_code=500, detail=f"Failed to upload artwork: {str(e)}")
 
 
-@router.put("/artwork/{artwork_id}", status_code=status.HTTP_204_NO_CONTENT)
+@router.put("/{artwork_id}", status_code=status.HTTP_204_NO_CONTENT)
 async def update_artwork(db: db_dependency,
                          title: str = Form(...),
                          description: str = Form(...),
@@ -62,7 +65,7 @@ async def update_artwork(db: db_dependency,
         raise HTTPException(status_code=500, detail=f"Failed to update artwork: {str(e)}")
 
 
-@router.delete("/artwork/{artwork_id}", status_code=status.HTTP_204_NO_CONTENT)
+@router.delete("/{artwork_id}", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_artwork(db: db_dependency, artwork_id: int = Path(gt=0)):
     result = await delete_artwork_id(db, artwork_id)
     if not result:

@@ -30,7 +30,7 @@ You should be able to see if you are in your virtual environment if your termina
 
 Run the following command to install to dependencies packages :
 
-`pip install fastapi 'uvicorn[standard]' sqlalchemy python-multipart 'passlib[bcrypt]' python-decouple`
+`pip install fastapi 'uvicorn[standard]' sqlalchemy python-multipart 'passlib[bcrypt]' python-decouple 'python-jose[cryptography]'`
 
 
 Make sure all the packages are installed by running :
