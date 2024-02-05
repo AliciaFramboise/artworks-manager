@@ -2,11 +2,12 @@ from datetime import datetime, timedelta
 from typing import Annotated
 
 from decouple import config
-from fastapi import Depends
+from fastapi import Depends, HTTPException
 from fastapi.security import OAuth2PasswordBearer
 from jose import jwt, JWTError
 from passlib.context import CryptContext
 from sqlalchemy.orm import Session
+from starlette import status
 
 from api.model.user_dto import UserRequest
 from database.model.Users import Users
@@ -55,7 +56,10 @@ async def get_current_user(token: Annotated[str, Depends(oauth2_bearer)]):
         user_id: int = payload.get('id')
         user_role: str = payload.get('role')
         if username is None or user_id is None:
-            return False
+            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
+                                detail='Could not validate user.')
         return {'username': username, 'id': user_id, 'user_role': user_role}
     except JWTError:
-        return False
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
+                            detail='Could not validate user.')
+

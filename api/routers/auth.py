@@ -1,6 +1,7 @@
 from datetime import timedelta
 from typing import Annotated
 
+from decouple import config
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.security import OAuth2PasswordRequestForm
 from passlib.context import CryptContext
@@ -20,6 +21,8 @@ db_dependency = Annotated[Session, Depends(get_db)]
 
 bcrypt = CryptContext(schemes=['bcrypt'], deprecated='auto')
 
+TOKEN_ACCESS_TIME = config('ACCESS_TOKEN_TIME', default=20)
+
 
 @router.post("/", status_code=status.HTTP_201_CREATED)
 async def create_user(db: db_dependency,
@@ -36,6 +39,6 @@ async def login_with_token(form_data: Annotated[OAuth2PasswordRequestForm, Depen
     if not user:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
                             detail='Could not validate user.')
-    token = await create_access_token(user.username, user.id, user.role, timedelta(minutes=20))
+    token = await create_access_token(user.username, user.id, user.role, timedelta(minutes=TOKEN_ACCESS_TIME))
     return {'access_token': token, 'token_type': 'bearer'}
 

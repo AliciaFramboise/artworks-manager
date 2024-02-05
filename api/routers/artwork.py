@@ -8,6 +8,7 @@ from starlette import status
 from database.database import get_db
 from services.artworkService import get_all_artworks, save_artwork, update_artwork_by_id, delete_artwork_id, \
     get_artwork_by_id
+from services.authService import get_current_user
 
 router = APIRouter(
     prefix='/artwork',
@@ -16,6 +17,8 @@ router = APIRouter(
 
 db_dependency = Annotated[Session, Depends(get_db)]
 
+user_dependency = Annotated[dict, Depends(get_current_user)]
+
 
 @router.get("/", status_code=status.HTTP_200_OK)
 async def get_all(db: db_dependency):
@@ -23,7 +26,10 @@ async def get_all(db: db_dependency):
 
 
 @router.get("/{artwork_id}", status_code=status.HTTP_200_OK)
-async def get_artwork(db: db_dependency, artwork_id: int = Path(gt=0)):
+async def get_artwork(user: user_dependency, db: db_dependency, artwork_id: int = Path(gt=0)):
+    if user is None:
+        raise HTTPException(status_code=401, detail='Authentication Failed')
+
     artwork = await get_artwork_by_id(db, artwork_id)
     if artwork is not None:
         return artwork
