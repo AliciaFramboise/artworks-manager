@@ -3,6 +3,7 @@ import os
 from sqlalchemy.orm import Session
 
 from database.model.Artwork import Artwork
+from services.exceptions import InvalidParameterException
 
 
 async def get_all_artworks(db: Session):
@@ -29,7 +30,7 @@ async def get_artwork_by_id(db: Session, artwork_id: int):
 async def update_artwork_by_id(db: Session, artwork_id: int, title: str, description: str):
     artwork_to_update = db.query(Artwork).filter(Artwork.id == artwork_id).first()
     if artwork_to_update is None:
-        return False
+        raise InvalidParameterException("Artwork to update cannot be null")
 
     artwork_to_update.title = title
     artwork_to_update.description = description
@@ -44,12 +45,11 @@ async def update_artwork_by_id(db: Session, artwork_id: int, title: str, descrip
 async def delete_artwork_id(db: Session, artwork_id: int):
     artwork_to_delete = await get_artwork_by_id(db, artwork_id)
     if artwork_to_delete is None:
-        return False
+        raise InvalidParameterException("Artwork to delete can not be null")
+
     db.query(Artwork).filter(Artwork.id == artwork_id).delete()
     db.commit()
 
     file_path = os.path.join("uploads", artwork_to_delete.filename)
     if os.path.exists(file_path):
         os.remove(file_path)
-
-    return artwork_to_delete is not None

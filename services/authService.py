@@ -11,14 +11,16 @@ from starlette import status
 
 from api.model.user_dto import UserRequest
 from database.model.Users import Users
+from services.exceptions import InvalidParameterException, AuthenticationFailedException
 
 TOKEN_KEY = config('SECRET_KEY')
 ALGORITHM = config('TOKEN_ALGO', default='HS256')
 
 oauth2_bearer = OAuth2PasswordBearer(tokenUrl='auth/token')
+bcrypt = CryptContext(schemes=['bcrypt'], deprecated='auto')
 
 
-async def save_user(db: Session, bcrypt: CryptContext, user_request: UserRequest):
+async def save_user(db: Session, user_request: UserRequest):
     user_model = Users(
         email=user_request.email,
         username=user_request.username,
@@ -33,12 +35,12 @@ async def save_user(db: Session, bcrypt: CryptContext, user_request: UserRequest
     return user_model
 
 
-async def authenticate_user(db: Session, bcrypt: CryptContext, username: str, password: str):
+async def authenticate_user(db: Session, username: str, password: str):
     user = db.query(Users).filter(Users.username == username).first()
     if not user:
-        return False
+        raise InvalidParameterException("User can not be null")
     if not bcrypt.verify(password, user.hashed_password):
-        return False
+        raise AuthenticationFailedException("Password is incorrect")
     return user
 
 
@@ -62,4 +64,3 @@ async def get_current_user(token: Annotated[str, Depends(oauth2_bearer)]):
     except JWTError:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
                             detail='Could not validate user.')
-

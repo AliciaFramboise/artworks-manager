@@ -9,6 +9,7 @@ from database.database import get_db
 from services.artworkService import get_all_artworks, save_artwork, update_artwork_by_id, delete_artwork_id, \
     get_artwork_by_id
 from services.authService import get_current_user
+from services.exceptions import InvalidParameterException
 
 router = APIRouter(
     prefix='/artwork',
@@ -66,13 +67,15 @@ async def update_artwork(db: db_dependency,
             raise HTTPException(status_code=404, detail='Artwork not found.')
 
         return {"file_id": result.id, "title": title, "description": description}
-    except Exception as e:
+    except (Exception, InvalidParameterException) as e:
         # Handle exceptions (e.g., file upload failure)
         raise HTTPException(status_code=500, detail=f"Failed to update artwork: {str(e)}")
 
 
 @router.delete("/{artwork_id}", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_artwork(db: db_dependency, artwork_id: int = Path(gt=0)):
-    result = await delete_artwork_id(db, artwork_id)
-    if not result:
-        raise HTTPException(status_code=404, detail='Artwork not found.')
+    try:
+        result = await delete_artwork_id(db, artwork_id)
+        return result
+    except InvalidParameterException as e:
+        raise HTTPException(status_code=404, detail=f"Artwork not found: {str(e)}")

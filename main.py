@@ -4,7 +4,7 @@ from decouple import config
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from api.routers import artwork, ideas, auth
+from api.routers import artwork, ideas, auth, users
 from database.database import Base, engine
 
 app = FastAPI()
@@ -12,6 +12,8 @@ app = FastAPI()
 app.include_router(artwork.router)
 app.include_router(ideas.router)
 app.include_router(auth.router)
+app.include_router(users.router)
+
 
 URL = config('APP_URL', default='localhost')
 PORT = config('APP_PORT', default='3000')

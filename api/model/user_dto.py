@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 
 class UserRequest(BaseModel):
@@ -14,3 +14,8 @@ class UserRequest(BaseModel):
 class Token(BaseModel):
     access_token: str
     token_type: str
+
+
+class UserVerification(BaseModel):
+    password: str
+    new_password: str = Field(min_length=6)
