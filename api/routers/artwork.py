@@ -27,7 +27,9 @@ async def get_all(db: db_dependency):
 
 
 @router.get("/{artwork_id}", status_code=status.HTTP_200_OK)
-async def get_artwork(user: user_dependency, db: db_dependency, artwork_id: int = Path(gt=0)):
+async def get_artwork(user: user_dependency,
+                      db: db_dependency,
+                      artwork_id: int = Path(gt=0)):
     if user is None:
         raise HTTPException(status_code=401, detail='Authentication Failed')
 
@@ -38,10 +40,14 @@ async def get_artwork(user: user_dependency, db: db_dependency, artwork_id: int 
 
 
 @router.post("/", status_code=status.HTTP_201_CREATED)
-async def create_artwork(db: db_dependency,
+async def create_artwork(user: user_dependency,
+                         db: db_dependency,
                          title: str = Form(...),
                          description: str = Form(...),
                          file: UploadFile = File(...)):
+    if user is None:
+        raise HTTPException(status_code=401, detail='Authentication Failed')
+
     try:
         # Save file to server
         with open(f"uploads/{file.filename}", "wb") as f:
@@ -57,10 +63,14 @@ async def create_artwork(db: db_dependency,
 
 
 @router.put("/{artwork_id}", status_code=status.HTTP_204_NO_CONTENT)
-async def update_artwork(db: db_dependency,
+async def update_artwork(user: user_dependency,
+                         db: db_dependency,
                          title: str = Form(...),
                          description: str = Form(...),
                          artwork_id: int = Path(gt=0)):
+    if user is None:
+        raise HTTPException(status_code=401, detail='Authentication Failed')
+
     try:
         result = await update_artwork_by_id(db, artwork_id, title, description)
         if not result:
@@ -73,7 +83,12 @@ async def update_artwork(db: db_dependency,
 
 
 @router.delete("/{artwork_id}", status_code=status.HTTP_204_NO_CONTENT)
-async def delete_artwork(db: db_dependency, artwork_id: int = Path(gt=0)):
+async def delete_artwork(user: user_dependency,
+                         db: db_dependency,
+                         artwork_id: int = Path(gt=0)):
+    if user is None:
+        raise HTTPException(status_code=401, detail='Authentication Failed')
+
     try:
         result = await delete_artwork_id(db, artwork_id)
         return result
