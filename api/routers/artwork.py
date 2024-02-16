@@ -79,7 +79,7 @@ async def update_artwork(user: user_dependency,
         return {"file_id": result.id, "title": title, "description": description}
     except (Exception, InvalidParameterException) as e:
         # Handle exceptions (e.g., file upload failure)
-        raise HTTPException(status_code=500, detail=f"Failed to update artwork: {str(e)}")
+        raise HTTPException(status_code=404, detail=f"Failed to update artwork: {str(e)}")
 
 
 @router.delete("/{artwork_id}", status_code=status.HTTP_204_NO_CONTENT)
